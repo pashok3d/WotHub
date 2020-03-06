@@ -1,5 +1,5 @@
 # WotHub
- Data mining system for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) game.
+ Data mining system for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) game replays.
 # About
  WotHub is a data mining project which parses data packets from game replays, preprocesses data and makes predictions based on statistical approach. 
 # How to use
