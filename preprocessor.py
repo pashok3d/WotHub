@@ -9,12 +9,10 @@ def find_packet_index(lst, key, value):
             indices.append(i)
     return indices
 
-def positions_to_column(data):
+def position_to_column(data, index):
     positions = data['position']
-    x = float(positions[0])
-    y = float(positions[1])
-    z = float(positions[2])
-    return [x,y,z]
+    position = float(positions[index])
+    return position
 
 def feature_to_column(data,vehicles_dict,feature):
     player_id = str(int(data['player_id']))
@@ -37,11 +35,9 @@ def main(file_name):
     packets = packets.astype({'clock': 'int32'})
     packets.drop_duplicates(subset = ['clock','player_id'],keep = 'last', inplace = True) 
     
-    positions = packets.apply(positions_to_column,axis=1,result_type='expand')
-    
-    packets['x'] = positions[0]
-    packets['y'] = positions[1]
-    packets['z'] = positions[2]
+    packets['x'] = packets.apply(lambda x: position_to_column(x,0), axis=1)
+    packets['y'] = packets.apply(lambda x: position_to_column(x,1), axis=1)
+    packets['z'] = packets.apply(lambda x: position_to_column(x,2), axis=1)
     
     packets = packets.drop(columns = ['type','position','team'])
     #packets.drop_duplicates(keep = 'first', inplace = True) 
