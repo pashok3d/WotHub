@@ -61,7 +61,7 @@ if __name__ == '__main__':
     ax.imshow(color_map[0], extent=color_map[1])
     ax.set_axis_off()
     
-    plt.savefig('output.png', transparancy = True)  
+    plt.savefig('output.png', transparent = True)  
 
 
 
