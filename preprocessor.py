@@ -18,11 +18,7 @@ def feature_to_column(data,vehicles_dict,feature):
     player_id = str(int(data['player_id']))
     return vehicles_dict[player_id][feature]
 
-def main(file_name):
-    file_path = os.path.join(raw_data_path,file_name)
-    file = open(file_path, encoding="utf8")
-    data = json.load(file)
-    
+def preprocess(data):
     #packets 
     packets = data['packets']
     packets_10_index = find_packet_index(packets, 'type', 10)
@@ -85,12 +81,9 @@ def main(file_name):
     features_to_add = ['global_id','nickname','team','vehicle']
     for feature in features_to_add:
       packets[feature] = packets.apply(lambda x: feature_to_column(x,vehicles_dict,feature), axis=1)  
-      
-    file_name = file_name[:-len('.json')] + '.csv'
-    file_path_save = os.path.join(pro_data_path,file_name)
-    packets.to_csv(file_path_save, index=False)
-    
 
+    return packets
+    
 if __name__ == '__main__':
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -103,7 +96,15 @@ if __name__ == '__main__':
             if '.json' in file:
                 files.append(file)
             
-    for file in files:
-        main(file)
+    for file_name in files:
+        file_path = os.path.join(raw_data_path,file_name)
+        file_desc = open(file_path, encoding="utf8")
+        data = json.load(file_desc)
+
+        processed_packets = preprocess(data)
+
+        file_name = file_name[:-len('.json')] + '.csv'
+        file_path_save = os.path.join(pro_data_path,file_name)
+        processed_packets.to_csv(file_path_save, index=False)
 
 
