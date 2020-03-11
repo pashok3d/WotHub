@@ -1,7 +1,7 @@
 # WotHub
  Data mining system for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) game replays.
 # About
- WotHub is a data mining project which parses data packets from game replays, preprocesses data and makes predictions based on statistical approach. 
+ WotHub is a data mining project in which we parse data packets from game replays, preprocess data and make predictions based on statistical approach. 
 # How to use
 ### Preparing
 * Download [replays](http://wotreplays.ru/) and place them in `/replays` folder. 
@@ -25,3 +25,7 @@ Output image `output.png` will appear in the same directory.
 Example:
 
 ![](output.png)
+
+### To-do
+- [ ] Replays scraper
+- [ ] System deployment
