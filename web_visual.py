@@ -53,7 +53,7 @@ def load_data(map):
     for frame_path in data_frames_paths:
         df = df.append(pd.read_csv(frame_path), ignore_index = True)
 
-    df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
+    #df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
 
     return df
 
