@@ -59,7 +59,6 @@ team_to_filter = st.sidebar.radio('Team', (1,2))
 clock_to_filter = st.sidebar.slider('Clock', 0, 600, 300)
 st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
-
 df = load_data(maps[map_to_filter]) 
 img = load_img(maps[map_to_filter]) 
 
