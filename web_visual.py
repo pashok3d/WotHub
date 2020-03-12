@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from meta_data import map_names, maps
 from matplotlib.colors import Normalize
 import scipy.stats as stat
+import s3fs
 
 def density(data, bins = 50j):
     x = data['x']
@@ -39,20 +40,8 @@ def density(data, bins = 50j):
 
 @st.cache
 def load_data(map):
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    replays_path = os.path.join(dir_path,'pro_data')
-    
-    data_frames_paths = []
-    for r, d, f in os.walk(replays_path):
-            for file in f:
-                if '.csv' in file:
-                    data_frames_paths.append(os.path.join(r,file))
-    
-    df = pd.DataFrame([])
-    
-    for frame_path in data_frames_paths:
-        df = df.append(pd.read_csv(frame_path), ignore_index = True)
 
+    df = pd.read_csv('https://wothub-data.s3.amazonaws.com/15839426139299_france_F116_Bat_Chatillon_Bourrasque_malinovka.csv')
     df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
 
     return df
@@ -73,27 +62,22 @@ clock_to_filter = st.sidebar.slider('Clock', 0, 600, 300)
 st.sidebar.markdown('`Made by Pavel Tarashkevich`')
 
 
-##df = load_data(maps[map_to_filter]) 
+df = load_data(maps[map_to_filter]) 
 img = load_img(maps[map_to_filter]) 
 
-##data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter),:]
+data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter)]
 
-##if not data_choice.empty:
-##    color_map = density(data_choice, 50j)
-##
-##    plt.style.use('classic')
-##    fig,ax = plt.subplots(figsize=(12, 12))
-##        
-##    ax.imshow(img, extent=[-500,500,-500,500]) 
-##    ax.imshow(color_map[0], extent=color_map[1])
-##    ax.set_axis_off()
-##
-##    st.pyplot()
-##else:
-##    st.text('No data.')
+if not data_choice.empty:
+    color_map = density(data_choice, 50j)
 
-fig,ax = plt.subplots(figsize=(12, 12))
+    plt.style.use('classic')
+    fig,ax = plt.subplots(figsize=(12, 12))
         
-ax.imshow(img, extent=[-500,500,-500,500]) 
+    ax.imshow(img, extent=[-500,500,-500,500]) 
+    ax.imshow(color_map[0], extent=color_map[1])
+    ax.set_axis_off()
 
-st.pyplot()
+    st.pyplot()
+else:
+    st.text('No data.')
+
