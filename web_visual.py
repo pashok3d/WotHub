@@ -40,10 +40,8 @@ def density(data, bins = 50j):
 
 @st.cache
 def load_data(map):
-
     df = pd.read_csv('https://wothub-data.s3.amazonaws.com/processed_data.csv')
     df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
-
     return df
 
 @st.cache
@@ -59,7 +57,7 @@ st.sidebar.title("WotHub")
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
 team_to_filter = st.sidebar.radio('Team', (1,2))
 clock_to_filter = st.sidebar.slider('Clock', 0, 600, 300)
-st.sidebar.markdown('`Made by Pavel Tarashkevich`')
+st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
 
 df = load_data(maps[map_to_filter]) 
@@ -69,14 +67,11 @@ data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_f
 
 if not data_choice.empty:
     color_map = density(data_choice, 50j)
-
     plt.style.use('classic')
     fig,ax = plt.subplots(figsize=(12, 12))
-        
     ax.imshow(img, extent=[-500,500,-500,500]) 
     ax.imshow(color_map[0], extent=color_map[1])
     ax.set_axis_off()
-
     st.pyplot()
 else:
     st.text('No data.')
