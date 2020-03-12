@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from meta_data import map_names, maps
 from matplotlib.colors import Normalize
 import scipy.stats as stat
+import s3fs
 
 def density(data, bins = 50j):
     x = data['x']
@@ -39,20 +40,8 @@ def density(data, bins = 50j):
 
 @st.cache
 def load_data(map):
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    replays_path = os.path.join(dir_path,'pro_data')
-    
-    data_frames_paths = []
-    for r, d, f in os.walk(replays_path):
-            for file in f:
-                if '.csv' in file:
-                    data_frames_paths.append(os.path.join(r,file))
-    
-    df = pd.DataFrame([])
-    
-    for frame_path in data_frames_paths:
-        df = df.append(pd.read_csv(frame_path), ignore_index = True)
 
+    df = pd.read_csv('https://wothub-data.s3.amazonaws.com/processed_data.csv')
     df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
 
     return df
@@ -60,7 +49,7 @@ def load_data(map):
 @st.cache
 def load_img(map_name):
     dir_path = os.path.dirname(os.path.realpath(__file__))    
-    img_dir = os.path.join(dir_path,'maps\images')
+    img_dir = os.path.join(dir_path,'maps/images')
     img_path = os.path.join(img_dir, map_name + '.png')
     img = plt.imread(img_path)
     return img
@@ -76,7 +65,7 @@ st.sidebar.markdown('`Made by Pavel Tarashkevich`')
 df = load_data(maps[map_to_filter]) 
 img = load_img(maps[map_to_filter]) 
 
-data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter),:]
+data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter)]
 
 if not data_choice.empty:
     color_map = density(data_choice, 50j)
@@ -91,3 +80,4 @@ if not data_choice.empty:
     st.pyplot()
 else:
     st.text('No data.')
+
