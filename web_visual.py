@@ -37,7 +37,6 @@ def density(data, bins = 50j):
     
     return [colors,[xmin, xmax, ymin, ymax]]
 
-@st.cache
 def load_data(map):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     replays_path = os.path.join(dir_path,'pro_data')
@@ -47,6 +46,7 @@ def load_data(map):
             for file in f:
                 if '.csv' in file:
                     data_frames_paths.append(os.path.join(r,file))
+                    st.text(file)
     
     df = pd.DataFrame([])
     
@@ -57,7 +57,6 @@ def load_data(map):
 
     return df
 
-@st.cache
 def load_img(map_name):
     img_dir = os.path.join(dir_path,'maps/images')
     img_path = os.path.join(img_dir, map_name + '.png')
@@ -65,11 +64,6 @@ def load_img(map_name):
     return img
 
 st.sidebar.title("WotHub")
-
-dir_path = os.path.dirname(os.path.realpath(__file__)) 
-st.text('Directory: ' + dir_path)   
-replays_path = os.path.join(dir_path,'pro_data')
-st.text('Replays directory: ' + replays_path) 
 
 # choose parameters
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
