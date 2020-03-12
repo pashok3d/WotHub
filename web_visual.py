@@ -40,17 +40,22 @@ def density(data, bins = 50j):
 def load_data(map):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     replays_path = os.path.join(dir_path,'pro_data')
+
+    st.text("Replay path: " + replays_path)
     
     data_frames_paths = []
     for r, d, f in os.walk(replays_path):
-            for file in f:
-                if '.csv' in file:
-                    data_frames_paths.append(os.path.join(r,file))
-                    st.text(file)
+        st.text(r)
+        st.text(d)
+        for file in f:
+            if '.csv' in file:
+                data_frames_paths.append(os.path.join(r,file))
+                st.text(file)
     
     df = pd.DataFrame([])
     
     for frame_path in data_frames_paths:
+        st.text("frame_path: " + frame_path)
         df = df.append(pd.read_csv(frame_path), ignore_index = True)
 
     #df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
