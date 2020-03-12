@@ -59,13 +59,18 @@ def load_data(map):
 
 @st.cache
 def load_img(map_name):
-    dir_path = os.path.dirname(os.path.realpath(__file__))    
     img_dir = os.path.join(dir_path,'maps/images')
     img_path = os.path.join(img_dir, map_name + '.png')
     img = plt.imread(img_path)
     return img
 
 st.sidebar.title("WotHub")
+
+dir_path = os.path.dirname(os.path.realpath(__file__)) 
+st.text('Directory: ' + dir_path)   
+replays_path = os.path.join(dir_path,'pro_data')
+st.text('Replays directory: ' + dir_path) 
+
 # choose parameters
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
 team_to_filter = st.sidebar.radio('Team', (1,2))
@@ -76,18 +81,20 @@ st.sidebar.markdown('`Made by Pavel Tarashkevich`')
 df = load_data(maps[map_to_filter]) 
 img = load_img(maps[map_to_filter]) 
 
-data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter),:]
+st.write(df.head())
 
-if not data_choice.empty:
-    color_map = density(data_choice, 50j)
+#data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter),:]
 
-    plt.style.use('classic')
-    fig,ax = plt.subplots(figsize=(12, 12))
-        
-    ax.imshow(img, extent=[-500,500,-500,500]) 
-    ax.imshow(color_map[0], extent=color_map[1])
-    ax.set_axis_off()
-
-    st.pyplot()
-else:
-    st.text('No data.')
+#if not data_choice.empty:
+#    color_map = density(data_choice, 50j)
+#
+#    plt.style.use('classic')
+#    fig,ax = plt.subplots(figsize=(12, 12))
+#        
+#    ax.imshow(img, extent=[-500,500,-500,500]) 
+#    ax.imshow(color_map[0], extent=color_map[1])
+#    ax.set_axis_off()
+#
+#    st.pyplot()
+#else:
+#    st.text('No data.')
