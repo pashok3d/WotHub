@@ -65,11 +65,13 @@ def load_img(map_name):
     img = plt.imread(img_path)
     return img
 
-st.title("WotHub")
+st.sidebar.title("WotHub")
 # choose parameters
-map_to_filter = st.selectbox('Map', map_names, index = 15)
-team_to_filter = st.radio('Team', (1,2))
-clock_to_filter = st.slider('Clock', 0, 600, 300)
+map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
+team_to_filter = st.sidebar.radio('Team', (1,2))
+clock_to_filter = st.sidebar.slider('Clock', 0, 600, 300)
+st.sidebar.markdown('`Made by Pavel Tarashkevich`')
+
 
 df = load_data(maps[map_to_filter]) 
 img = load_img(maps[map_to_filter]) 
@@ -80,7 +82,7 @@ if not data_choice.empty:
     color_map = density(data_choice, 50j)
 
     plt.style.use('classic')
-    fig,ax = plt.subplots(figsize=(5, 5))
+    fig,ax = plt.subplots(figsize=(12, 12))
         
     ax.imshow(img, extent=[-500,500,-500,500]) 
     ax.imshow(color_map[0], extent=color_map[1])
