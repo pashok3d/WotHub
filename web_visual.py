@@ -60,7 +60,7 @@ def load_data(map):
 @st.cache
 def load_img(map_name):
     dir_path = os.path.dirname(os.path.realpath(__file__))    
-    img_dir = os.path.join(dir_path,'maps\images')
+    img_dir = os.path.join(dir_path,'maps/images')
     img_path = os.path.join(img_dir, map_name + '.png')
     img = plt.imread(img_path)
     return img
