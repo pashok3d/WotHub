@@ -9,6 +9,6 @@ for r, d, f in os.walk(replays_path):
                 replays.append(file)
 
 for replay in replays:
-    output_name = replay[:14] + '.json'
+    output_name = replay[:-len('.wotreplay')] + '.json'
     path = 'wotreplay-parser.exe --parse --root ./ --type json --input ./replays/' + replay + ' --output ./raw_data/' + output_name 
     os.system(path)
