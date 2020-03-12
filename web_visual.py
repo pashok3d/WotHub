@@ -41,16 +41,18 @@ def load_data(map):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     replays_path = os.path.join(dir_path,'pro_data')
 
-    st.text("Replay path: " + replays_path)
-    
+    st.text('dir_path: ' + dir_path)
+
     data_frames_paths = []
     for r, d, f in os.walk(replays_path):
+        st.text('r: ')
         st.text(r)
+        st.text('d: ')
         st.text(d)
         for file in f:
             if '.csv' in file:
                 data_frames_paths.append(os.path.join(r,file))
-                st.text(file)
+                st.text('file: ' + file)
     
     df = pd.DataFrame([])
     
@@ -81,7 +83,6 @@ st.sidebar.markdown('`Made by Pavel Tarashkevich`')
 df = load_data(maps[map_to_filter]) 
 img = load_img(maps[map_to_filter]) 
 
-st.write(df.head())
 
 #data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter),:]
 
