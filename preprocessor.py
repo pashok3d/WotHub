@@ -95,16 +95,18 @@ if __name__ == '__main__':
         for file in f:
             if '.json' in file:
                 files.append(file)
-            
+
+    processed_data = pd.DataFrame([])
+
     for file_name in files:
         file_path = os.path.join(raw_data_path,file_name)
         file_desc = open(file_path, encoding="utf8")
         data = json.load(file_desc)
 
-        processed_packets = preprocess(data)
+        processed_data = processed_data.append(preprocess(data), ignore_index = True)
 
-        file_name = file_name[:-len('.json')] + '.csv'
-        file_path_save = os.path.join(pro_data_path,file_name)
-        processed_packets.to_csv(file_path_save, index=False)
+    file_name = 'processed_data.csv'
+    file_path_save = os.path.join(pro_data_path,file_name)
+    processed_data.to_csv(file_path_save, index=False)
 
 

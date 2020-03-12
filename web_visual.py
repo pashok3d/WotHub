@@ -41,7 +41,7 @@ def density(data, bins = 50j):
 @st.cache
 def load_data(map):
 
-    df = pd.read_csv('https://wothub-data.s3.amazonaws.com/15839426139299_france_F116_Bat_Chatillon_Bourrasque_malinovka.csv')
+    df = pd.read_csv('https://wothub-data.s3.amazonaws.com/processed_data.csv')
     df = df.loc[(df['map_name'] == maps[map_to_filter]),:] # FLAG Create local division
 
     return df
