@@ -69,7 +69,7 @@ st.sidebar.title("WotHub")
 dir_path = os.path.dirname(os.path.realpath(__file__)) 
 st.text('Directory: ' + dir_path)   
 replays_path = os.path.join(dir_path,'pro_data')
-st.text('Replays directory: ' + dir_path) 
+st.text('Replays directory: ' + replays_path) 
 
 # choose parameters
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
