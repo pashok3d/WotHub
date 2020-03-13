@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
         processed_data = processed_data.append(preprocess(data), ignore_index = True)
 
-    file_name = 'processed_data.csv'
+    file_name = packets['map_name'][0] + '.csv'
     file_path_save = os.path.join(pro_data_path,file_name)
     processed_data.to_csv(file_path_save, index=False)
 
