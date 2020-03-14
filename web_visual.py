@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from meta_data import map_names, maps
+from meta_data import map_names, maps_data, vehicle_types, vehicle_types_data
 from matplotlib.colors import Normalize
 import scipy.stats as stat
 import s3fs
@@ -22,10 +22,13 @@ def density(data, bandwidth, bins = 50j):
     X, Y = np.mgrid[xmin:xmax:bins, ymin:ymax:bins]
     positions = np.vstack([X.ravel(), Y.ravel()])
     values = np.vstack([x, y])
-    kernel = stat.gaussian_kde(values)
-    kernel.set_bandwidth(bw_method=kernel.factor / bandwidth)
-    Z = np.reshape(kernel(positions).T, X.shape)
-    
+    try:
+        kernel = stat.gaussian_kde(values)
+        kernel.set_bandwidth(bw_method=kernel.factor / bandwidth)
+        Z = np.reshape(kernel(positions).T, X.shape)
+    except:
+        return None
+
     Z = np.rot90(Z)
     vmax = np.abs(Z).max()
     vmin = np.abs(Z).min()
@@ -42,8 +45,12 @@ def density(data, bandwidth, bins = 50j):
 
 @st.cache
 def load_data(map_name):
-    df = pd.read_csv('https://wothub-data.s3.amazonaws.com/processed_data.csv')
-    df = df.loc[(df['map_name'] == map_name),:] # FLAG Create local division
+    try:
+        file_path = 'https://wothub-data.s3.amazonaws.com/' + map_name + '.csv'
+        df = pd.read_csv(file_path)
+        df = df.loc[(df['map_name'] == map_name),:] # FLAG Create local division
+    except: 
+        return pd.DataFrame([])
     return df
 
 @st.cache
@@ -58,25 +65,39 @@ st.sidebar.title("WotHub")
 # choose parameters
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
 team_to_filter = st.sidebar.radio('Team', (1,2))
+levels_to_filter = st.sidebar.slider('Levels', 1, 10, (6,8))
+types_to_filter = st.sidebar.multiselect('Type', vehicle_types, vehicle_types[0])
 clock_to_filter = st.sidebar.slider('Clock', 0, 600, 300)
 bandwidth_to_filter = st.sidebar.slider('Bandwidth', 1., 5., 2.)
 st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
-df = load_data(maps[map_to_filter]) 
-img = load_img(maps[map_to_filter]) 
+df = load_data(maps_data[map_to_filter]) 
+img = load_img(maps_data[map_to_filter]) 
 
-data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter)]
+if not df.empty:
+    type_bit_map = np.full(np.shape(df['type']), False)
 
-if not data_choice.empty:
-    color_map = density(data_choice, bandwidth_to_filter, 50j) 
-    
-    background = Image.fromarray(np.uint8(img*255))
-    density_map = Image.fromarray(np.uint8(color_map[0]*255))
-    density_map = density_map.resize((512,512))
-    background.paste(density_map, (0, 0),  density_map)
-    st.image(background)
+    for type in types_to_filter:
+        type_bit_map = np.asarray((type_bit_map) | (df['type'] == vehicle_types_data[type]))
+
+    data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter) & 
+                                        (type_bit_map) &
+                                        (df['tier'] >= levels_to_filter[0]) & (df['tier'] <= levels_to_filter[1])]
+                                     
+    if not data_choice.empty:
+        color_map = density(data_choice, bandwidth_to_filter, 50j) 
+        if color_map:
+            background = Image.fromarray(np.uint8(img*255))
+            density_map = Image.fromarray(np.uint8(color_map[0]*255))
+            density_map = density_map.resize((512,512))
+            background.paste(density_map, (0, 0),  density_map)
+            st.image(background, use_column_width=True)
+        else:
+            st.text('Not enough data, try to change filter parameters.') 
+    else:
+        st.text('No data, try to change filter parameters.')
 else:
-    st.text('No data.')
+    st.text('Failed to load data.')
     
     
 

@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from meta_data import vehicles_data
 import os
 
 def find_packet_index(lst, key, value):
@@ -17,6 +18,25 @@ def position_to_column(data, index):
 def feature_to_column(data,vehicles_dict,feature):
     player_id = str(int(data['player_id']))
     return vehicles_dict[player_id][feature]
+
+def nation_to_column(data):
+    vehicle = data['vehicle'].split(':')
+    return vehicle[0]
+
+def vehicle_name_to_column(data):
+    vehicle = data['vehicle'].split(':')
+    vehicle_id = vehicle[1]
+    return vehicles_data[vehicle_id]['short_name']
+
+def tier_to_column(data):
+    vehicle = data['vehicle'].split(':')
+    vehicle_id = vehicle[1]
+    return vehicles_data[vehicle_id]['tier']
+
+def type_to_column(data):
+    vehicle = data['vehicle'].split(':')
+    vehicle_id = vehicle[1]
+    return vehicles_data[vehicle_id]['type']
 
 def preprocess(data):
     #packets 
@@ -82,7 +102,13 @@ def preprocess(data):
     for feature in features_to_add:
       packets[feature] = packets.apply(lambda x: feature_to_column(x,vehicles_dict,feature), axis=1)  
 
-    return packets
+    packets['nation'] = packets.apply(nation_to_column, axis=1)
+    packets['vehicle_name'] = packets.apply(vehicle_name_to_column, axis=1)
+    packets['tier'] = packets.apply(tier_to_column, axis=1)
+    packets['type'] = packets.apply(type_to_column, axis=1)
+    packets = packets.drop('vehicle', axis = 1)
+
+    return packets.reset_index(drop=True)
     
 if __name__ == '__main__':
 
@@ -96,17 +122,24 @@ if __name__ == '__main__':
             if '.json' in file:
                 files.append(file)
 
-    processed_data = pd.DataFrame([])
-
     for file_name in files:
         file_path = os.path.join(raw_data_path,file_name)
+        print(file_path)
         file_desc = open(file_path, encoding="utf8")
         data = json.load(file_desc)
+        try:
+            processed_data = preprocess(data)
+        except:
+            print('Failed to process file.')
+            continue  
 
-        processed_data = processed_data.append(preprocess(data), ignore_index = True)
+        file_name = processed_data['map_name'][0] + '.csv'
+        file_path = os.path.join(pro_data_path,file_name)
 
-    file_name = packets['map_name'][0] + '.csv'
-    file_path_save = os.path.join(pro_data_path,file_name)
-    processed_data.to_csv(file_path_save, index=False)
+        if os.path.isfile(file_path):
+            processed_data = processed_data.append(pd.read_csv(file_path), ignore_index = True)
+
+        processed_data.to_csv(file_path, index = False)
+
 
 
