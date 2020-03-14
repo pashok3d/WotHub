@@ -9,18 +9,19 @@
 For a parsing part we use [wotreplay-parser](https://github.com/evido/wotreplay-parser) created by [Jan Temmerman](https://github.com/evido).
 * run `parser.py`
 
-Parsed data will appear in `/raw_data` folder in .json format.
+Parser reads replay files from `/replays` folder. Parsed data will appear in `/raw_data` folder in .json format for each replay.
 ### Preprocessing
 * run `preprocessor.py`
 
-Preprocessed data will appear in `/pro_data` folder in .csv format.
+It reads json files from `/raw_data` folder. Preprocessed data will appear in `/pro_data` folder in .csv format, accumulated for each map.
 
 ### Visualization
-Visualization consists in creating position density plot where high values represent most frequent players positions.
+Visualization consists in creating position density plot where high values represent most frequent players positions. 
+> **Note: Heroku does not store csv files, so we load data from AWS S3 Server, instead of `/pro_data` folder.**
+
 We use streamlit for convenient manipulation. 
 
 * `streamlit run .\web_visual.py` runs visualization on localhost
-
 
 Example:
 
@@ -31,3 +32,4 @@ We use heroku for further project deployment. Here is a link to web app - [WotHu
 
 ### To-do
 - [ ] Replays scraper
+- [ ] More data
