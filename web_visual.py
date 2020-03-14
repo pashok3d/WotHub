@@ -43,12 +43,12 @@ def density(data, bandwidth, bins = 50j):
         
     return [colors,[xmin, xmax, ymin, ymax]]
 
-@st.cache
+
 def load_data(map_name):
     try:
         file_path = 'https://wothub-data.s3.amazonaws.com/' + map_name + '.csv'
         df = pd.read_csv(file_path)
-        df = df.loc[(df['map_name'] == map_name),:] # FLAG Create local division
+        #df = df.loc[(df['map_name'] == map_name),:] # FLAG Create local division
     except: 
         return pd.DataFrame([])
     return df
@@ -62,12 +62,13 @@ def load_img(map_name):
     return img
 
 st.sidebar.title("WotHub")
+st.sidebar.markdown('World of Tanks players position predictor.')
 # choose parameters
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
 team_to_filter = st.sidebar.radio('Team', (1,2))
 levels_to_filter = st.sidebar.slider('Levels', 1, 10, (6,8))
 types_to_filter = st.sidebar.multiselect('Type', vehicle_types, vehicle_types[0])
-clock_to_filter = st.sidebar.slider('Clock', 0, 600, 300)
+clock_to_filter = st.sidebar.slider('Clock', 0, 900, 300)
 bandwidth_to_filter = st.sidebar.slider('Bandwidth', 1., 5., 2.)
 st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
