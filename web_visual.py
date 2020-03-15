@@ -68,7 +68,8 @@ map_to_filter = st.sidebar.selectbox('Map', map_names, index = 0)
 team_to_filter = st.sidebar.radio('Team', (1,2))
 levels_to_filter = st.sidebar.slider('Levels', 1, 10, (6,8))
 types_to_filter = st.sidebar.multiselect('Type', vehicle_types, vehicle_types[0])
-clock_to_filter = st.sidebar.slider('Clock', 0, 900, 300)
+clock_to_filter = st.sidebar.slider('Clock', 0, 900, 300, format = '', step = 5)
+st.sidebar.text('{:02d}:{:02d}'.format(clock_to_filter//60, clock_to_filter % 60))
 bandwidth_to_filter = st.sidebar.slider('Bandwidth', 1., 5., 2.)
 st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
@@ -81,9 +82,10 @@ if not df.empty:
     for type in types_to_filter:
         type_bit_map = np.asarray((type_bit_map) | (df['type'] == vehicle_types_data[type]))
 
-    data_choice = df.loc[(df['team'] == team_to_filter) & (df['clock'] == clock_to_filter) & 
-                                        (type_bit_map) &
-                                        (df['tier'] >= levels_to_filter[0]) & (df['tier'] <= levels_to_filter[1])]
+    data_choice = df.loc[(df['team'] == team_to_filter) & 
+                        (df['clock'] == clock_to_filter) &
+                        (type_bit_map) &
+                        (df['tier'] >= levels_to_filter[0]) & (df['tier'] <= levels_to_filter[1])]
                                      
     if not data_choice.empty:
         color_map = density(data_choice, bandwidth_to_filter, 50j) 
