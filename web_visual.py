@@ -64,7 +64,7 @@ def load_img(map_name):
 st.sidebar.title("WotHub")
 st.sidebar.markdown('World of Tanks players position predictor.')
 # choose parameters
-map_to_filter = st.sidebar.selectbox('Map', map_names, index = 15)
+map_to_filter = st.sidebar.selectbox('Map', map_names, index = 0)
 team_to_filter = st.sidebar.radio('Team', (1,2))
 levels_to_filter = st.sidebar.slider('Levels', 1, 10, (6,8))
 types_to_filter = st.sidebar.multiselect('Type', vehicle_types, vehicle_types[0])
