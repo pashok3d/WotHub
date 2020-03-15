@@ -43,7 +43,7 @@ def density(data, bandwidth, bins = 50j):
         
     return [colors,[xmin, xmax, ymin, ymax]]
 
-
+@st.cache
 def load_data(map_name):
     try:
         file_path = 'https://wothub-data.s3.amazonaws.com/' + map_name + '.csv'
