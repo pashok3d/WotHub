@@ -1,6 +1,6 @@
 # WotHub
 ### About
-[WotHub](https://floating-savannah-13776.herokuapp.com/) is a data mining project for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) in which we parse data packets from game replays, preprocess data and make players position predictions based on statistical approach. 
+[WotHub](https://wothub.herokuapp.com) is a data mining project for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) in which we parse data packets from game replays, preprocess data and make players position predictions based on statistical approach. 
 # How to use
 > **Note: If you want to check out web version, jump to "[Deployment](https://github.com/pashok3d/WotHub#deployment)" section.**
 ### Preparing
@@ -28,7 +28,7 @@ Example:
 ![](output.png)
 
 ### Deployment
-We use heroku for further project deployment. Here is a link to web app - [WotHub](https://floating-savannah-13776.herokuapp.com/).
+We use heroku for further project deployment. Here is a link to web app - [WotHub](https://wothub.herokuapp.com).
 
 ### To-do
 - [ ] Replays scraper
