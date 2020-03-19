@@ -33,3 +33,4 @@ We use heroku for further project deployment. Here is a link to web app - [WotHu
 ### To-do
 - [ ] Replays scraper
 - [ ] More data
+- [ ] Shifting to cloud computing
