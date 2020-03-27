@@ -2,8 +2,11 @@
 ### About
 [WotHub](https://wothub.herokuapp.com) is a data mining project for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) in which we parse data packets from game replays, preprocess data and make players position predictions based on statistical approach. 
 # How to use
-> **Note: If you want to check out web version, jump to "[Deployment](https://github.com/pashok3d/WotHub#deployment)" section.**
+> **Only Windows OS is supported.**
+
+> **If you want to check out web version, jump to "[Deployment](https://github.com/pashok3d/WotHub#deployment)" section.**
 ### Preparing
+* Make sure to have Python 3+ along with all necessary libraries from `requirements.txt`
 * Download [replays](http://wotreplays.ru/) and place them in `/replays` folder. 
 ### Parsing 
 For a parsing part we use [wotreplay-parser](https://github.com/evido/wotreplay-parser) created by [Jan Temmerman](https://github.com/evido).
@@ -30,7 +33,5 @@ Example:
 ### Deployment
 We use heroku for further project deployment. Here is a link to web app - [WotHub](https://wothub.herokuapp.com).
 
-### To-do
-- [ ] Replays scraper
-- [ ] More data
-- [ ] Shifting to cloud computing
+### Maintaining
+Scrapping replays to Amazon EC2 (Ubuntu), processing and storing on AWS S3 Server.
