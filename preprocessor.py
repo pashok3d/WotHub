@@ -29,6 +29,11 @@ def type_to_column(data):
     vehicle_id = vehicle[1]
     return vehicles_data[vehicle_id]['type']
 
+def position_to_column(data, index):
+    positions = data['position']
+    position = float(positions[index])
+    return position
+
 def preprocess(data): 
     #packets cleaning
     packets = data['packets']   
@@ -38,7 +43,9 @@ def preprocess(data):
     packets = packets.dropna()
     packets = packets.astype({'clock': 'int32'})
     packets.drop_duplicates(subset = ['clock','player_id'], keep = 'last', inplace = True) #keep only one position per second
-    packets[['x','y','z']] = pd.DataFrame(packets.position.tolist(), columns=['x','y','z'])
+    packets['x'] = packets.apply(lambda x: position_to_column(x,0), axis=1)
+    packets['y'] = packets.apply(lambda x: position_to_column(x,1), axis=1)
+    packets['z'] = packets.apply(lambda x: position_to_column(x,2), axis=1)
     packets = packets.drop(columns = ['type','position','team'])
     
     #map
