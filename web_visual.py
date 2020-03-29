@@ -68,9 +68,12 @@ map_to_filter = st.sidebar.selectbox('Map', map_names, index = 0)
 team_to_filter = st.sidebar.radio('Team', (1,2))
 levels_to_filter = st.sidebar.slider('Levels', 1, 10, (6,8))
 types_to_filter = st.sidebar.multiselect('Type', vehicle_types, vehicle_types[0])
-clock_to_filter = st.sidebar.slider('Clock', 0, 900, 300, format = '%d s', step = 5)
-clock_left = 900 - clock_to_filter
-st.sidebar.text('Time left: {:02d}:{:02d}'.format(clock_left//60, clock_left % 60))
+time_input = st.sidebar.text_input("Time left: ", value = '13:30')
+time = time_input.split(':')
+time = int(time[0]) * 60 + int(time[1])
+time = 900 - time
+if time > 900 or time < 0:
+    time = 300
 bandwidth_to_filter = st.sidebar.slider('Bandwidth', 1., 5., 2.)
 st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
@@ -84,7 +87,7 @@ if not df.empty:
         type_bit_map = np.asarray((type_bit_map) | (df['type'] == vehicle_types_data[type]))
 
     data_choice = df.loc[(df['team'] == team_to_filter) & 
-                        (df['clock'] == clock_to_filter) &
+                        (df['clock'] == time) &
                         (type_bit_map) &
                         (df['tier'] >= levels_to_filter[0]) & (df['tier'] <= levels_to_filter[1])]
                                      
