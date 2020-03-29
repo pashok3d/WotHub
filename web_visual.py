@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 from meta_data import map_names, maps_data, vehicle_types, vehicle_types_data
 from matplotlib.colors import Normalize
 import scipy.stats as stat
-import s3fs
+from scipy import interpolate
 from PIL import Image
 
-def density(data, bandwidth, bins = 50j):
+def density(data, bandwidth):
     x = data['x']
     y = data['z']
         
@@ -18,8 +18,8 @@ def density(data, bandwidth, bins = 50j):
     xmax = 500.0
     ymin = -500.0
     ymax = 500.0
-    
-    X, Y = np.mgrid[xmin:xmax:bins, ymin:ymax:bins]
+
+    X, Y = np.mgrid[xmin:xmax:50j, ymin:ymax:50j]
     positions = np.vstack([X.ravel(), Y.ravel()])
     values = np.vstack([x, y])
     try:
@@ -33,7 +33,7 @@ def density(data, bandwidth, bins = 50j):
     vmax = np.abs(Z).max()
     vmin = np.abs(Z).min()
     cmap = plt.cm.jet
-    
+
     # Normalize the colors b/w 0 and 1
     colors_norm = Normalize(vmin, vmax, clip=True)(Z)
     colors = cmap(colors_norm)
@@ -62,14 +62,15 @@ def load_img(map_name):
     return img
 
 st.sidebar.title("WotHub")
-st.sidebar.markdown('World of Tanks players position predictor.')
+st.sidebar.markdown('World of Tanks players position predictor')
 # choose parameters
 map_to_filter = st.sidebar.selectbox('Map', map_names, index = 0)
 team_to_filter = st.sidebar.radio('Team', (1,2))
 levels_to_filter = st.sidebar.slider('Levels', 1, 10, (6,8))
 types_to_filter = st.sidebar.multiselect('Type', vehicle_types, vehicle_types[0])
-clock_to_filter = st.sidebar.slider('Clock', 0, 900, 300, format = '', step = 5)
-st.sidebar.text('{:02d}:{:02d}'.format(clock_to_filter//60, clock_to_filter % 60))
+clock_to_filter = st.sidebar.slider('Clock', 0, 900, 300, format = '%d s', step = 5)
+clock_left = 900 - clock_to_filter
+st.sidebar.text('Time left: {:02d}:{:02d}'.format(clock_left//60, clock_left % 60))
 bandwidth_to_filter = st.sidebar.slider('Bandwidth', 1., 5., 2.)
 st.sidebar.markdown('Made by [Pavel Tarashkevich](https://github.com/pashok3d)')
 
@@ -88,7 +89,7 @@ if not df.empty:
                         (df['tier'] >= levels_to_filter[0]) & (df['tier'] <= levels_to_filter[1])]
                                      
     if not data_choice.empty:
-        color_map = density(data_choice, bandwidth_to_filter, 50j) 
+        color_map = density(data_choice, bandwidth_to_filter) 
         if color_map:
             background = Image.fromarray(np.uint8(img*255))
             density_map = Image.fromarray(np.uint8(color_map[0]*255))
