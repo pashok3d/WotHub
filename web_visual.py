@@ -19,7 +19,7 @@ def density(data, bandwidth):
     ymin = -500.0
     ymax = 500.0
 
-    X, Y = np.mgrid[xmin:xmax:50j, ymin:ymax:50j]
+    X, Y = np.mgrid[xmin:xmax:25j, ymin:ymax:25j]
     positions = np.vstack([X.ravel(), Y.ravel()])
     values = np.vstack([x, y])
     try:
