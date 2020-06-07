@@ -33,5 +33,8 @@ Example:
 ### Deployment
 We use heroku for further project deployment. Here is a link to web app - [WotHub](https://wothub.herokuapp.com).
 
-### Maintaining
-Scrapping replays to Amazon EC2 (Ubuntu), processing and storing on AWS S3 Server.
+### TODO
+- [ ] Update maps.
+- [ ] Change density function parameters for smoother plot.
+- [ ] Add Unix support.
+- [ ] Archive repo.
