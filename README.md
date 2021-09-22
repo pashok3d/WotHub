@@ -1,6 +1,6 @@
 # WotHub
 ### About
-[WotHub](https://wothub.herokuapp.com) is a data mining project for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) in which we parse data packets from game replays, preprocess data and make players position predictions based on statistical approach. 
+WotHub is a data mining project for [World of Tanks](https://en.wikipedia.org/wiki/World_of_Tanks) in which we parse data packets from game replays, preprocess data and make players position predictions based on statistical approach. 
 # How to use
 > **Only Windows OS is supported.**
 
@@ -31,7 +31,7 @@ Example:
 ![](output.png)
 
 ### Deployment
-We use heroku for further project deployment. Here is a link to web app - [WotHub](https://wothub.herokuapp.com).
+We use heroku for further project deployment. Here is a link to web app - [WotHub](https://wothub.herokuapp.com) (depricated).
 
 ### TODO
 - [ ] Update maps.
