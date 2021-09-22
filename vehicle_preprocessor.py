@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-file_path = r'C:\Users\pavel\Documents\GitHub\WotHub\vehicles\vehicles_data.json'
+file_path = './vehicles/vehicles_data.json'
 file_desc = open(file_path, encoding="utf8")
 json_data = json.load(file_desc)
 data = pd.DataFrame(json_data)
